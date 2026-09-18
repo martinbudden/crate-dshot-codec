@@ -1,0 +1,11 @@
+[alias]
+# Run using: 'cargo check-host'
+check-host = "test --no-default-features --target x86_64-unknown-linux-gnu"
+
+# Run using: 'cargo test-host'
+test-host = "test --no-default-features  --target x86_64-unknown-linux-gnu"
+
+# Continuous Integration
+ci = "run --package xtask --bin xtask"
+# MSRV
+check-msrv = "run --package xtask --bin xtask -- check-msrv"
