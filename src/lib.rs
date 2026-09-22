@@ -24,6 +24,7 @@ mod dshot_errors;
 mod dshot_speed;
 mod dshot_telemetry;
 mod dshot_telemetry_frame;
+mod dshot_waveform;
 mod esc_dshot;
 mod gcr_frame;
 mod nrzi_frame;
@@ -34,7 +35,11 @@ pub use dshot_command_frame::DshotCommandFrame;
 pub use dshot_commands::DshotCommand;
 pub use dshot_errors::DshotError;
 pub use dshot_speed::DshotSpeed;
+
 pub use dshot_telemetry::{Telemetry, TelemetryType};
 pub use dshot_telemetry_frame::DshotTelemetryFrame;
+
+pub use dshot_waveform::{DshotMotorMasks, DshotTiming, DshotWaveform};
+
 pub use gcr_frame::GcrFrame;
 pub use nrzi_frame::NrziFrame;

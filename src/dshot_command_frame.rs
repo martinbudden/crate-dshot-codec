@@ -48,6 +48,7 @@ impl Deref for DshotCommandFrame {
         &self.0
     }
 }
+
 impl DshotCommandFrame {
     pub const NO_TELEMETRY: bool = false;
     pub const WITH_TELEMETRY: bool = true;
