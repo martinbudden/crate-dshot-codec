@@ -9,6 +9,14 @@ that is each release may contain incompatible API changes.
 
 Once the API has stabilized this project will adopt semantic versioning, the first release to do so will be `0.2.0`.
 
+## [0.1.1] - 2026-10-01
+
+### Added
+
+- `DshotMotorMasks`
+- `DshotTiming`
+- `DshotWaveform`
+
 ## [0.1.0] - 2026-09-17
 
 Initial release.
