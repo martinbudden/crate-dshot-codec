@@ -9,6 +9,12 @@ that is each release may contain incompatible API changes.
 
 Once the API has stabilized this project will adopt semantic versioning, the first release to do so will be `0.2.0`.
 
+## [0.1.2] - 2026-10-01
+
+### Removed
+
+- Removed dependency on `num-traits`.
+
 ## [0.1.1] - 2026-10-01
 
 ### Added

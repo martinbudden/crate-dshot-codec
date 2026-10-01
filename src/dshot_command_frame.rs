@@ -144,15 +144,13 @@ impl DshotCommandFrame {
     #[must_use]
     pub fn from_throttle_unidirectional(throttle: f32) -> Self {
         #[allow(unused)]
-        use num_traits::float::FloatCore;
-
         // Clamp throttle to prevent out-of-bounds calculations
         let throttle = throttle.clamp(0.0, 1.0);
 
         // Scale linearly across the available 1999 active throttle steps
         let range = f32::from(Self::THROTTLE_MAX - Self::THROTTLE_MIN);
         #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-        let dshot_value = (throttle * range).round() as u16 + Self::THROTTLE_MIN;
+        let dshot_value = ((throttle * range) + 0.5) as u16 + Self::THROTTLE_MIN;
 
         // For unidirectional frames the telemetry bit IS NOT set.
         Self::encode_raw(dshot_value, Self::NO_TELEMETRY)
@@ -163,15 +161,13 @@ impl DshotCommandFrame {
     #[must_use]
     pub fn from_throttle_bidirectional(throttle: f32) -> Self {
         #[allow(unused)]
-        use num_traits::float::FloatCore;
-
         // Clamp throttle to prevent out-of-bounds calculations
         let throttle = throttle.clamp(0.0, 1.0);
 
         // Scale linearly across the available 1999 active throttle steps
         let range = f32::from(Self::THROTTLE_MAX - Self::THROTTLE_MIN);
         #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-        let dshot_value = (throttle * range).round() as u16 + Self::THROTTLE_MIN;
+        let dshot_value = ((throttle * range) + 0.5) as u16 + Self::THROTTLE_MIN;
 
         // For bidirectional frames the telemetry bit IS set.
         Self::encode_raw(dshot_value, Self::WITH_TELEMETRY)
