@@ -1,4 +1,4 @@
-# `dshot-codec` Rust Crate<br>![License: MIT](https://img.shields.io/badge/license-MIT-green) [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![open source](https://badgen.net/badge/open/source/blue?icon=github)
+# `dshot-codec` Rust Crate<br>[![Crates.io](https://img.shields.io/crates/v/dshot-codec.svg)](https://crates.io/crates/dshot-codec) [![Documentation](https://docs.rs/dshot-codec/badge.svg)](https://docs.rs/dshot-codec) [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![open source](https://badgen.net/badge/open/source/blue?icon=github)
 
 `dshot-codec` supports the encoding and decoding of `Dshot` data.
 
@@ -30,18 +30,18 @@ It is used in both unidirectional and bidirectional mode (see the table below to
 
 ### Unidirectional vs Bidirectional Dshot Modes
 
-| Operational Aspect     | Unidirectional (Throttle)           | Unidirectional (Commands)                 | Bidirectional (Throttle & Commands)                |
-| :--------------------- | :---------------------------------- | :---------------------------------------- | :------------------------------------------------- |
-| **Telemetry Bit**      | **`false`** (Set to `0`)            | **`true`** (Set to `1`)                   | **`true`** (Set to `1`)                            |
-| **XOR Checksum Mode**  | **Standard**                        | **Bitwise Inverted**                      | **Bitwise Inverted**                               |
-| **ESC Action**         | Executes throttle<br>Remains silent | Executes command<br>Returns a ghost reply | Executes command<br>Returns a telemetry frame      |
-| **FC Pin Mode**        | Permanent **Output**                | Permanent **Output**                      | Flips from **Output to Input** right after TX      |
-| **Repetition Gate**    | Streams continuously                | **Must repeat ~10 times** to execute      | Commands **must repeat ~10 times** to execute      |
-| **FC Software Action** | Fire-and-forget stream              | Fire-and-forget stream                    | Transmits, then pauses ~30µs to capture `GcrFrame` |
+| Operational Aspect     | Unidirectional (Throttle)         | Unidirectional (Commands)               | Bidirectional (Throttle & Commands)              |
+| :--------------------- | :-------------------------------- | :-------------------------------------- | :----------------------------------------------- |
+| **Telemetry Bit**      | **`false`** (`0`)                 | **`true`** (`1`)                        | **`true`** (`1`)                                 |
+| **XOR Checksum Mode**  | **Standard**                      | **Bitwise Inverted**                    | **Bitwise Inverted**                             |
+| **ESC Action**         |Executes throttle<br>Remains silent|Executes command<br>Returns a ghost reply| Executes command<br>Returns a telemetry frame    |
+| **FC Pin Mode**        | Permanent **Output**              | Permanent **Output**                    | Flips from **Output to Input** right after TX    |
+| **Repetition Gate**    | Streams continuously              | **Must repeat ~10 times** to execute    | Commands **must repeat ~10 times** to execute    |
+| **FC Software Action** | Fire-and-forget stream            | Fire-and-forget stream                  |Transmits, then pauses ~30µs to capture `GcrFrame`|
 
 ## Decoding telemetry data from the ESC
 
-The ESC sends data in an **NRZI** encoded bitstream.
+The ESC sends data in an **NRZI**(Non-Return-to-Zero, Inverted) encoded bitstream.
 
 On STM32 microcontrollers this data is captured in a 21-bit `NrziFrame` which is decoded to a 20-bit `GcrFrame`.
 
@@ -49,7 +49,7 @@ On Raspberry Pi Pico microcontrollers **PIO** is used to capture this data direc
 
 This `GcrFrame` is then decoded to a `DshotTelemetryFrame` which can then be directly used by the host software.
 
-`dshot-codec` contains methods for decoding `NrziFrame`s and `GcrFrames`.
+`dshot-codec` contains methods for decoding `NrziFrame`s and `GcrFrame`s.
 
 The process is illustrated below:
 
@@ -104,7 +104,7 @@ The microcontroller's internal clock would lose synchronization, and incorrectly
 
 By combining `GCR` and `NRZI`, the `DShot` protocol ensures synchronization:
 
-* GCR ensures that there are never have more than two 0 bits in a row in hte data stream.
+* GCR ensures that there are never have more than two 0 bits in a row in the data stream.
 * Because there are mostly 1 bits, `NRZI` forces the physical wire to constantly flip back and forth between `HIGH` and `LOW`.
 
 These constant flips act like a heartbeat, keeping the microcontroller's input capture timers synchronized with the ESC's transmission clock.
@@ -184,8 +184,7 @@ See <https://en.wikipedia.org/wiki/Run-length_limited#GCR:_(0,2)_RLL> for detail
 
 ### `no_std`
 
-This crate is `no_std`, that it does not link to the standard library and so does not depend on an operating system
-and uses no allocation. This means it is suitable for embedded system.
+This crate is `no_std`, `no alloc`, and the Minimum Supported Rust Version (MSRV) is `Rust 1.89`.
 
 ## License
 
