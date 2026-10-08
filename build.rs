@@ -1,11 +1,11 @@
 use rustc_version::{version_meta, Channel};
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Check if the "simd" feature is enabled
     let simd_enabled = std::env::var_os("CARGO_FEATURE_SIMD").is_some();
 
-    // Check the current compiler channel
-    let channel = version_meta().unwrap().channel;
+    // Check the current compiler channel using ?
+    let channel = version_meta()?.channel;
 
     if simd_enabled && channel != Channel::Nightly {
         panic!(
@@ -21,4 +21,6 @@ fn main() {
     if channel == Channel::Nightly {
         println!("cargo:rustc-cfg=nightly");
     }
+
+    Ok(())
 }

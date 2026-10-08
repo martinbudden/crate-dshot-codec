@@ -261,7 +261,6 @@ mod test_traits {
 
 #[cfg(test)]
 mod tests {
-    #![allow(clippy::unwrap_used)]
     use super::*;
 
     #[test]
@@ -304,8 +303,11 @@ mod tests {
         // `eRPM` = 60_000_000 / 600 = 100_000 `eRPM`
         assert_eq!(frame.erpm(), 100_000);
 
-        let decode_res = frame.try_decode_erpm();
-        assert_eq!(decode_res.unwrap(), 100_000);
+        let result = frame.try_decode_erpm();
+        assert!(result.is_ok());
+        if let Ok(erpm) = result {
+            assert_eq!(erpm, 100_000);
+        }
     }
 
     #[test]
@@ -313,12 +315,12 @@ mod tests {
         // Case 1: Zero payload (stopped motor)
         let zero_frame = DshotTelemetryFrame::from_raw_12(0);
         assert_eq!(zero_frame.erpm(), 0);
-        assert_eq!(zero_frame.try_decode_erpm().unwrap(), 0);
+        assert_eq!(zero_frame.try_decode_erpm(), Ok(0));
 
         // Case 2: Maximum payload 0x0FFF (often indicates timeout or bad value)
         let max_frame = DshotTelemetryFrame::from_raw_12(0x0FFF);
         assert_eq!(max_frame.erpm(), 0);
-        assert_eq!(max_frame.try_decode_erpm().unwrap(), 0);
+        assert_eq!(max_frame.try_decode_erpm(), Ok(0));
     }
 
     #[test]
@@ -331,8 +333,8 @@ mod tests {
         assert!(!frame.is_erpm_frame());
         assert!(frame.try_decode_erpm().is_err());
 
-        let telemetry = frame.try_decode_telemetry().unwrap();
-        assert_eq!(telemetry, Telemetry::Temperature(85));
+        let telemetry = frame.try_decode_telemetry();
+        assert_eq!(telemetry, Ok(Telemetry::Temperature(85)));
     }
 
     #[test]
@@ -351,8 +353,8 @@ mod tests {
         // raw_12 = (2 << 9) | 64 = 1024 | 64 = 1088 = 0x440
         let frame = DshotTelemetryFrame::from_type_value(2, 64);
 
-        let telemetry = frame.try_decode_telemetry().unwrap();
-        assert_eq!(telemetry, Telemetry::Voltage(16_000));
+        let telemetry = frame.try_decode_telemetry();
+        assert_eq!(telemetry, Ok(Telemetry::Voltage(16_000)));
     }
 
     #[test]
@@ -362,19 +364,19 @@ mod tests {
         // raw_12 = (3 << 9) | 25 = 1536 | 25 = 1561 = 0x619
         let frame = DshotTelemetryFrame::from_type_value(3, 25);
 
-        let telemetry = frame.try_decode_telemetry().unwrap();
-        assert_eq!(telemetry, Telemetry::Current(25_000));
+        let telemetry = frame.try_decode_telemetry();
+        assert_eq!(telemetry, Ok(Telemetry::Current(25_000)));
     }
 
     #[test]
     fn test_edt_debug_and_state_events() {
         // Test data_type 4 (Debug1)
         let d1_frame = DshotTelemetryFrame::from_type_value(4, 42);
-        assert_eq!(d1_frame.try_decode_telemetry().unwrap(), Telemetry::Debug1(42));
+        assert_eq!(d1_frame.try_decode_telemetry(), Ok(Telemetry::Debug1(42)));
 
         // Test data_type 7 (StateEvent)
         let se_frame = DshotTelemetryFrame::from_type_value(7, 3);
-        assert_eq!(se_frame.try_decode_telemetry().unwrap(), Telemetry::StateEvent(3));
+        assert_eq!(se_frame.try_decode_telemetry(), Ok(Telemetry::StateEvent(3)));
     }
 
     #[test]

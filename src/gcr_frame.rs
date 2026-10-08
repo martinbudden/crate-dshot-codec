@@ -98,7 +98,6 @@ mod test_traits {
 
 #[cfg(test)]
 mod tests {
-    #![allow(clippy::unwrap_used)]
     use super::*;
 
     // Helper function to build a raw 20-bit GCR integer from four 5-bit quintets.
@@ -139,12 +138,12 @@ mod tests {
 
         let decode_result = frame.try_decode();
 
-        assert!(decode_result.is_ok(), "Expected valid active eRPM frame decoding to succeed");
-
         // If your test harness handles actual structural return verification,
         // you can assert the final parsed u16 word evaluates to 0x55A5:
-        let decoded_frame = decode_result.unwrap();
-        assert_eq!(decoded_frame.raw_16(), 0x55A5, "Decoded DShot telemetry word layout mismatch");
+        assert!(decode_result.is_ok());
+        if let Ok(decoded_frame) = decode_result {
+            assert_eq!(decoded_frame.raw_16(), 0x55A5);
+        }
     }
     #[test]
     fn test_valid_edt_temperature_frame() {

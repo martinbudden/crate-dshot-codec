@@ -322,7 +322,6 @@ mod tests {
 }
 #[cfg(test)]
 mod command_frame_tests {
-    #![allow(clippy::unwrap_used)]
     use super::*;
 
     #[test]
@@ -361,23 +360,31 @@ mod command_frame_tests {
 
     #[test]
     fn test_try_from_valid_and_invalid() {
-        let valid_res = DshotCommandFrame::try_from(0);
-        assert!(valid_res.is_ok());
-        assert_eq!(valid_res.unwrap().value(), 0);
+        let result = DshotCommandFrame::try_from(0);
+        assert!(result.is_ok());
+        if let Ok(frame) = result {
+            assert_eq!(frame.value(), 0);
+        }
 
-        let valid_res = DshotCommandFrame::try_from(1);
-        assert!(valid_res.is_ok());
-        assert_eq!(valid_res.unwrap().value(), 1);
+        let result = DshotCommandFrame::try_from(1);
+        assert!(result.is_ok());
+        if let Ok(frame) = result {
+            assert_eq!(frame.value(), 1);
+        }
 
         // Max valid raw value is 2047
-        let valid_res = DshotCommandFrame::try_from(2047);
-        assert!(valid_res.is_ok());
-        assert_eq!(valid_res.unwrap().value(), 2047);
+        let result = DshotCommandFrame::try_from(2047);
+        assert!(result.is_ok());
+        if let Ok(frame) = result {
+            assert_eq!(frame.value(), 2047);
+        }
 
         // Over the limit should return the error value
-        let invalid_res = DshotCommandFrame::try_from(2048);
-        assert!(invalid_res.is_err());
-        assert_eq!(invalid_res.unwrap_err(), 2048);
+        let result = DshotCommandFrame::try_from(2048);
+        assert!(result.is_err());
+        if let Err(error) = result {
+            assert_eq!(error, 2048);
+        }
     }
 
     #[test]
