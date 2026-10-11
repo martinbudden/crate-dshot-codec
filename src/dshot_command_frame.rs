@@ -132,7 +132,7 @@ impl DshotCommandFrame {
         // Calculate the base XOR checksum
         let mut checksum = Self::calculate_checksum(frame_raw);
 
-        // Both Unidirectional and Bidirectional DShot require the checksum to be inverted when the telemetry bit is set.
+        // Both Unidirectional and Bidirectional Dshot require the checksum to be inverted when the telemetry bit is set.
         if with_telemetry {
             checksum = (!checksum) & 0x0F;
         }

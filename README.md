@@ -15,7 +15,7 @@ It has a number of `struct`s and `enum`s to do this:
 | `DshotCommandFrame`   | Send an RPM value or a command to the ESC   | Unidirectional or Bidirectional |
 | `DshotSpeed`          | `enum`, protocol speed                      | Unidirectional or Bidirectional |
 | `DshotCommand`        | `enum` of commands available (eg `Beep1`)   | Unidirectional or Bidirectional |
-| `DshotError`          | `enum`, Error handling                      | Unidirectional or Bidirectional |
+| `DshotError`          | `enum`, error handling                      | Unidirectional or Bidirectional |
 |                       |                                             |                                 |
 | `DshotTelemetryFrame` | Decoded data received from the ESC          | Bidirectional                   |
 | `TelemetryType`       | `enum` type of telemetry requested/received | Bidirectional                   |
@@ -30,14 +30,14 @@ It is used in both unidirectional and bidirectional mode (see the table below to
 
 ### Unidirectional vs Bidirectional Dshot Modes
 
-| Operational Aspect     | Unidirectional (Throttle)         | Unidirectional (Commands)               | Bidirectional (Throttle & Commands)              |
-| :--------------------- | :-------------------------------- | :-------------------------------------- | :----------------------------------------------- |
-| **Telemetry Bit**      | **`false`** (`0`)                 | **`true`** (`1`)                        | **`true`** (`1`)                                 |
-| **XOR Checksum Mode**  | **Standard**                      | **Bitwise Inverted**                    | **Bitwise Inverted**                             |
-| **ESC Action**         |Executes throttle<br>Remains silent|Executes command<br>Returns a ghost reply| Executes command<br>Returns a telemetry frame    |
-| **FC Pin Mode**        | Permanent **Output**              | Permanent **Output**                    | Flips from **Output to Input** right after TX    |
-| **Repetition Gate**    | Streams continuously              | **Must repeat ~10 times** to execute    | Commands **must repeat ~10 times** to execute    |
-| **FC Software Action** | Fire-and-forget stream            | Fire-and-forget stream                  |Transmits, then pauses ~30µs to capture `GcrFrame`|
+| Operational Aspect    | Unidirectional (Throttle)         | Unidirectional (Commands)               | Bidirectional (Throttle & Commands)              |
+| :-------------------- | :-------------------------------- | :-------------------------------------- | :----------------------------------------------- |
+| **Telemetry Bit**     | **`false`** (`0`)                 | **`true`** (`1`)                        | **`true`** (`1`)                                 |
+| **XOR Checksum Mode** | **Standard**                      | **Bitwise Inverted**                    | **Bitwise Inverted**                             |
+| **ESC Action**        |Executes throttle<br>Remains silent|Executes command<br>Returns a ghost reply| Executes command<br>Returns a telemetry frame    |
+| **Pin Mode**          | Permanent **Output**              | Permanent **Output**                    | Flips from **Output to Input** right after TX    |
+| **Repetition Gate**   | Streams continuously              | **Must repeat ~10 times** to execute    | Commands **must repeat ~10 times** to execute    |
+| **Software Action**   | Fire-and-forget stream            | Fire-and-forget stream                  |Transmits, then pauses ~30µs to capture `GcrFrame`|
 
 ## Decoding telemetry data from the ESC
 
@@ -95,14 +95,14 @@ This is known as standard **NRZ** (Non-Return-to-Zero).
 * A 1 bit forces the signal wire to change state (if it was High, it flips to Low; if it was Low, it flips to High).
 * A 0 bit forces the signal wire to stay the same (no change in voltage level).
 
-## Why `DShot` Telemetry uses **GCR** + **NRZI**
+## Why `Dshot` Telemetry uses **GCR** + **NRZI**
 
 Microcontrollers read incoming data by measuring the time between voltage transitions.
 
 If an ESC sent a long string of 0 bits over normal wiring, the voltage line would just sit perfectly flat for a long time.
 The microcontroller's internal clock would lose synchronization, and incorrectly read the incoming data packet.
 
-By combining `GCR` and `NRZI`, the `DShot` protocol ensures synchronization:
+By combining `GCR` and `NRZI`, the `Dshot` protocol ensures synchronization:
 
 * GCR ensures that there are never have more than two 0 bits in a row in the data stream.
 * Because there are mostly 1 bits, `NRZI` forces the physical wire to constantly flip back and forth between `HIGH` and `LOW`.

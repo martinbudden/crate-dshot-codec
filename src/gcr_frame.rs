@@ -52,10 +52,10 @@ impl GcrFrame {
         // Extract the 5-bit quintets.
         // Because the PIO shifts LSB-first, the chronological data order is inverted:
         // The first bits received land in the highest positions (bits 15-19).
-        let quintet3 = (gcr20 >> 15) & 0x1F; // First received (MSB of DShot frame)
+        let quintet3 = (gcr20 >> 15) & 0x1F; // First received (MSB of Dshot frame)
         let quintet2 = (gcr20 >> 10) & 0x1F;
         let quintet1 = (gcr20 >> 5) & 0x1F;
-        let quintet0 = gcr20 & 0x1F; // Last received (LSB of DShot frame)
+        let quintet0 = gcr20 & 0x1F; // Last received (LSB of Dshot frame)
 
         let nibble3 = Self::QUINTET_TO_NIBBLE[quintet3 as usize];
         let nibble2 = Self::QUINTET_TO_NIBBLE[quintet2 as usize];
@@ -71,7 +71,7 @@ impl GcrFrame {
             return Err(DshotError::InvalidNrziData);
         }
 
-        // Reconstruct the original 16-bit DShot telemetry word layout
+        // Reconstruct the original 16-bit Dshot telemetry word layout
         let telemetry_word = nibble0 | (nibble1 << 4) | (nibble2 << 8) | (nibble3 << 12);
 
         let frame = DshotTelemetryFrame::try_from(telemetry_word)?;

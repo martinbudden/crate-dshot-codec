@@ -19,7 +19,7 @@ For Dshot600 bit period ≈ 1.667 µs
 1: 6 ticks = 1.250 µs
 ```
 
-| DShot | required | 8-tick representation    |
+| Dshot | required | 8-tick representation    |
 |-------|----------|--------------------------|
 | bit   | 1.667 us | 8 × 208.33 ns = 1.667 us |
 | T0H   | 0.625 us | 3 × 208.33 ns = 0.625 us |

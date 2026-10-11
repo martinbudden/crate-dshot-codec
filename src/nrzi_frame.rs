@@ -64,7 +64,7 @@ impl NrziFrame {
     const fn nrzi21_to_gcr20(value: u32) -> u32 {
         let mut gcr_output: u32 = 0;
 
-        // DShot telemetry packets are transmitted MSB-first.
+        // Dshot telemetry packets are transmitted MSB-first.
         // Bit 20 is the leading sync zero, establishing our initial wire level.
         let mut previous_state = (value >> 20) & 0x01;
 
