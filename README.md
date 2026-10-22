@@ -2,11 +2,11 @@
 
 `dshot-codec` supports the encoding and decoding of `Dshot` data.
 
-`dshot-codec` implements the hardware-independent part of `Dshot`, it does no hardware manipulation itself. Rather it
-provides a foundation that can be used to write `Dshot` device drivers.
+`dshot-codec` implements the hardware-independent part of `Dshot`, it does no hardware manipulation itself.
+Rather it provides a foundation that can be used to write `Dshot` device drivers.
 
-More specifically `dshot-codec` supports the encoding of commands sent from the Flight Controller(FC) to the ESC (Electronic Speed Controller),
-and the decoding of telemetry sent from the ESC to the FC.
+More specifically `dshot-codec` supports the encoding of commands sent from the Flight Controller(FC) to the
+ESC (Electronic Speed Controller), and the decoding of telemetry sent from the ESC to the FC.
 
 It has a number of `struct`s and `enum`s to do this:
 
@@ -35,7 +35,7 @@ It is used in both unidirectional and bidirectional mode (see the table below to
 | **Telemetry Bit**     | **`false`** (`0`)                 | **`true`** (`1`)                        | **`true`** (`1`)                                 |
 | **XOR Checksum Mode** | **Standard**                      | **Bitwise Inverted**                    | **Bitwise Inverted**                             |
 | **ESC Action**        |Executes throttle<br>Remains silent|Executes command<br>Returns a ghost reply| Executes command<br>Returns a telemetry frame    |
-| **Pin Mode**          | Permanent **Output**              | Permanent **Output**                    | Flips from **Output to Input** right after TX    |
+| **GPIO Pin Mode**     | Permanent **Output**              | Permanent **Output**                    | Flips from **Output to Input** right after TX    |
 | **Repetition Gate**   | Streams continuously              | **Must repeat ~10 times** to execute    | Commands **must repeat ~10 times** to execute    |
 | **Software Action**   | Fire-and-forget stream            | Fire-and-forget stream                  |Transmits, then pauses ~30µs to capture `GcrFrame`|
 
@@ -184,13 +184,13 @@ See <https://en.wikipedia.org/wiki/Run-length_limited#GCR:_(0,2)_RLL> for detail
 
 ### `no_std`
 
-This crate is `no_std`, `no alloc`, and the Minimum Supported Rust Version (MSRV) is `Rust 1.89`.
+This crate is `no_std`, `no alloc`, `no panic`, `no unwrap`, `no expect`, and the Minimum Supported Rust Version (MSRV) is `Rust 1.83`.
 
 ## License
 
 Licensed under either of:
 
-* Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
-* MIT license ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
+* Apache License, Version 2.0, see: [LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>
+* MIT license, see: [LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>
 
 at your option.

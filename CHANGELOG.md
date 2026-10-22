@@ -9,6 +9,16 @@ that is each release may contain incompatible API changes.
 
 Once the API has stabilized this project will adopt semantic versioning, the first release to do so will be `0.2.0`.
 
+## [0.1.3] - 2026-10-22
+
+### Changed
+
+- Changed `.markdownlint.json` to allow more inline HTML.
+
+### Removed
+
+- use of unwrap in test code.
+
 ## [0.1.2] - 2026-10-01
 
 ### Removed
